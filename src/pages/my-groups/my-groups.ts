@@ -11,7 +11,10 @@ export class MyGroupsPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad MyGroupsPage');
+    
+  }
+  showNewGroupPage() {
+    this.navCtrl.push("NewGroupPage");
   }
 
 }
