@@ -1,40 +1,57 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Create Group</ion-title>
+    <ion-title *ngIf="creating">Create Group</ion-title>
+    <ion-title *ngIf="!creating">Join Group</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 <ion-content>
-  <ion-list>
-    <ion-item>
-      <ion-label floating>Group Title:</ion-label>
-      <ion-input type="text"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label floating>Group Access Code:</ion-label>
-      <ion-input type="text"></ion-input>
-    </ion-item>
-    <ion-item-divider></ion-item-divider>
-    <ion-item>
-      <ion-icon item-start name="time"></ion-icon>
-      <ion-label>Wake Time:</ion-label>
-      <ion-datetime displayFormat="h:mm"></ion-datetime>
-      <h5 item-end>AM</h5>
-    </ion-item>
-    <ion-item>
-      <ion-icon item-start name="cash"></ion-icon>
-      <ion-label>Penalty Fee:</ion-label>
-      <ion-input type="number"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-icon item-start name="mail"></ion-icon>
-      <ion-label>Wake Message:</ion-label>
-      <ion-input type="text"></ion-input>
-    </ion-item>
-  </ion-list>
-  <div padding>
-    <button ion-button full>Create</button>
+  <div *ngIf="creating">
+    <ion-list>
+      <ion-item>
+        <ion-label floating>Group Title:</ion-label>
+        <ion-input type="text"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Group Access Code:</ion-label>
+        <ion-input type="text"></ion-input>
+      </ion-item>
+      <ion-item-divider></ion-item-divider>
+      <ion-item>
+        <ion-icon item-start name="time"></ion-icon>
+        <ion-label>Wake Time:</ion-label>
+        <ion-datetime displayFormat="h:mm"></ion-datetime>
+        <h5 item-end>AM</h5>
+      </ion-item>
+      <ion-item>
+        <ion-icon item-start name="cash"></ion-icon>
+        <ion-label>Penalty Fee:</ion-label>
+        <ion-input type="number"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-icon item-start name="mail"></ion-icon>
+        <ion-label>Wake Message:</ion-label>
+        <ion-input type="text"></ion-input>
+      </ion-item>
+    </ion-list>
+    <div padding>
+      <button ion-button full>Create Group</button>
+      <ion-label>Group already exists?
+        <button ion-button clear (click)="toggleCreating()">Join Existing Group</button>
+      </ion-label>
+    </div>
   </div>
+  <div *ngIf="!creating">
+    <ion-item>
+      <ion-label>Group Access Code:</ion-label>
+      <ion-input type="text" [(ngModel)]="accessCode"></ion-input>
+    </ion-item>
+    <div padding>
+      <button ion-button full (click)="joinGroup()">Join Group</button>
+      <p>Don't have an access code? <button ion-button clear (click)="toggleCreating()">Create Group</button></p>
+    </div>
+  </div>
+  
 </ion-content>
