@@ -1,13 +1,12 @@
 <ion-header>
-
   <ion-navbar>
     <ion-title *ngIf="creating">Create Group</ion-title>
     <ion-title *ngIf="!creating">Join Group</ion-title>
   </ion-navbar>
-
 </ion-header>
 
 <ion-content>
+
   <div *ngIf="creating">
     <ion-list>
       <ion-item>
@@ -43,6 +42,7 @@
       </ion-label>
     </div>
   </div>
+
   <div *ngIf="!creating">
     <ion-item>
       <ion-label>Group Access Code:</ion-label>

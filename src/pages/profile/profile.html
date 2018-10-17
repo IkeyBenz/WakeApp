@@ -5,6 +5,53 @@
 </ion-header>
 
 
-<ion-content padding>
-
+<ion-content>
+  <ion-card *ngIf="!currentUser && loggingIn">
+    <ion-card-header>Login</ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item>
+          <ion-label floating>Email:</ion-label>
+          <ion-input type="email" [(ngModel)]="newUser.email"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label floating>Password:</ion-label>
+          <ion-input type="password" [(ngModel)]="newUser.password"></ion-input>
+        </ion-item>
+        <button ion-button full (click)="logUserIn()">Log In</button>
+        <p>Don't have an account? <a (click)="toggleLogginIn()">Create Account</a></p>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+  <ion-card *ngIf="!currentUser && !loggingIn">
+    <ion-card-header>Create Account</ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item>
+          <ion-label floating>First Name:</ion-label>
+          <ion-input type="text" [(ngModel)]="newUser.name.first"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label floating>Last Name:</ion-label>
+          <ion-input type=text [(ngModel)]="newUser.name.last"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label floating>Email:</ion-label>
+          <ion-input type="email" [(ngModel)]="newUser.email"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label floating>Password:</ion-label>
+          <ion-input type="password" [(ngModel)]="newUser.password"></ion-input>
+        </ion-item>
+      </ion-list>
+      <button ion-button full (click)="createUserAccount()">Create Account</button>
+      <p>Already Have An Account? <a (click)="toggleLogginIn()">Log In</a></p>
+    </ion-card-content>
+  </ion-card>
+  <ion-card *ngIf="currentUser">
+    <ion-card-header>Hello dickface, you are logged in!</ion-card-header>
+    <ion-card-content>
+      <p>Not {{currentUser.name.first}}? <a (click)="logUserOut()">Log Out</a></p>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
