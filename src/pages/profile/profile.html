@@ -48,10 +48,26 @@
       <p>Already Have An Account? <a (click)="toggleLogginIn()">Log In</a></p>
     </ion-card-content>
   </ion-card>
+
   <ion-card *ngIf="currentUser">
-    <ion-card-header>Hello dickface, you are logged in!</ion-card-header>
+    <img *ngIf="currentUser.profilePicture" src="{{currentUser.profilePicture}}" alt="">
+    <ion-item *ngIf="!currentUser.profilePicture">
+      <ion-label stacked>Profile Picture:</ion-label>
+      <ion-input type="file" [(ngModel)]="profilePicture"></ion-input>
+    </ion-item>
+
+    <ion-card-header>{{currentUser.name.first}} {{currentUser.name.last}}</ion-card-header>
     <ion-card-content>
+      <ion-list>
+        <ion-item-divider></ion-item-divider>
+        <ion-item>
+          <!-- <ion-label>Email:</ion-label> -->
+          <h3>Email:</h3>
+          <h2>{{currentUser.email}}</h2>
+        </ion-item>
+      </ion-list>
       <p>Not {{currentUser.name.first}}? <a (click)="logUserOut()">Log Out</a></p>
     </ion-card-content>
+
   </ion-card>
 </ion-content>

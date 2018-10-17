@@ -59,4 +59,5 @@ export const User = (function() {
         getUser: getProfileFor,
         authStateChanged: checkLoggedInState
     }
+    
 })();
