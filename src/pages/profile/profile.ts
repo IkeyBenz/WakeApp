@@ -8,7 +8,7 @@ import { User } from '../../models/user';
 })
 export class ProfilePage {
 
-  newUser = { name: { first: "", last: "" }, email: "", password: "" }
+  newUser = { name: { first: "", last: "" }, email: "", password: "", groups: [] }
   currentUser = false;
   loggingIn = true;
   
@@ -52,10 +52,9 @@ export class ProfilePage {
     User.logOut();
   }
   createUserAccount() {
-    User.signUp(this.newUser).then(user => {
-      this.showToast(`We've created your account, ${user.displayName}!`);
-      this.loggingIn = true;
-    }).catch(error => {
+    this.showToast(`Creating your account, ${this.newUser.name.first}...`);
+    User.signUp(this.newUser)
+    .catch(error => {
       this.showToast(error.message);
     });
   }

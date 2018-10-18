@@ -1,5 +1,6 @@
 import { auth as a, initializeApp, firestore, apps } from 'firebase';
 
+
 if (apps.length < 1) {
     initializeApp({
         apiKey: "AIzaSyByO4KbKnBBfkalLGOYqi7HwJbg2GgfI7Q",
@@ -12,3 +13,4 @@ if (apps.length < 1) {
 }
 export const db = firestore();
 export const auth = a();
+export const firebase = firestore

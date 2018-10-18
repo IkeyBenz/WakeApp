@@ -1,12 +1,12 @@
-import { auth, db } from './firebase';
+import { auth, db, firebase } from './firebase';
 
 export const User = (function() {
 
     function checkLoggedInState(callback) {
         auth.onAuthStateChanged(user => {
             if (user) {
-                console.log(user.uid);
                 getProfileFor(user.uid).then(snapshot => {
+                    console.log(snapshot)
                     callback({ user: snapshot.data() });
                 }).catch(error => {
                     callback({ error: error });
@@ -17,30 +17,26 @@ export const User = (function() {
         });
     }
 
-    function updateUser(uid, user) {
-        if (user.password) { delete user.password }
-        user['lastUpdated'] = new Date().toString();
-        return db.collection('users').doc(uid).set(user);
+    function updateUser(uid, updates) {
+        if (updates.password) { delete updates.password }
+        updates['lastUpdated'] = new Date().toString();
+        return getProfileFor(uid)
+        .then(docRef => db.collection('users').doc(uid).set({ ...docRef.data(), ...updates }))
     }
 
     function getProfileFor(uid) {
         return db.collection('users').doc(uid).get();
     }
 
-    function register(user): Promise<firebase.User> {
-        return new Promise(function(resolve, reject) {
-            auth.createUserWithEmailAndPassword(user.email, user.password)
-            .then(async (userCredential) => {
-                let userName = `${user.name.first} ${user.name.last}`;
-                await Promise.all([ 
-                      userCredential.user.updateProfile({ displayName: userName, photoURL: '' }),
-                      updateUser(userCredential.user.uid, user) 
-                ]);
-                return auth.signInWithCredential(userCredential.credential);
-            })
-            .then(newUser => resolve(newUser))
-            .catch(error => reject(error.message));
-        });
+
+    function register(newUser) {
+        return auth.createUserWithEmailAndPassword(newUser.email, newUser.password)
+            .then(userCredential => {
+                let userName = `${newUser.name.first} ${newUser.name.last}`;
+                return userCredential.user.updateProfile({ displayName: userName, photoURL: '' })
+                    .then(() => db.collection('users').doc(userCredential.user.uid).set(newUser))
+                    .then(() => auth.signInWithCredential(userCredential.credential));
+            });
     }
 
     function logUserIn(email, password) {
@@ -51,12 +47,22 @@ export const User = (function() {
         auth.signOut();
     }
 
+    function joinGroup(groupId) {
+        if (!auth.currentUser)
+            return Promise.reject('Not signed in.');
+        return db.collection('users').doc(auth.currentUser.uid).update({
+            groups: firebase.FieldValue.arrayUnion(groupId)
+        });
+    }
+
     return {
-        update : updateUser,
         signUp : register,
         logIn  : logUserIn,
         logOut : logUserOut,
+        update : updateUser,
+        joinGroup: joinGroup,
         getUser: getProfileFor,
+        currentUser: auth.currentUser,
         authStateChanged: checkLoggedInState
     }
     
