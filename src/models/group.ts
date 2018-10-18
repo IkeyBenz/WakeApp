@@ -1,6 +1,5 @@
 import { auth, db, firebase } from './firebase';
 import { User } from './user';
-import { query } from '@angular/core/src/render3/instructions';
 
 export const Group = (function() {
 
@@ -26,13 +25,15 @@ export const Group = (function() {
         .where('title', '==', title)
         .where('accessCode', '==', accessCode)
         .get().then(querySnap => {
-            console.log(querySnap.docs[0]);
-            querySnap.docs[0].ref.update({
+            if (querySnap.docs.length == 0)
+                return Promise.reject("That group doesn't exist, idiot!");
+            if (querySnap.docs[0].data().members.includes(auth.currentUser.uid))
+                return Promise.reject("You're already in that group, idiot!");
+            return querySnap.docs[0].ref.update({
                 members: firebase.FieldValue.arrayUnion(auth.currentUser.uid)
-            }).then(() => {
-                return Promise.resolve(querySnap.docs[0].id);
-            });
-        })
+            }).then(() => Promise.resolve(querySnap.docs[0].id))
+            .catch(error => Promise.reject(error.message));
+        });
     }
 
     function leaveGroup() {

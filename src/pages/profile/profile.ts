@@ -48,7 +48,6 @@ export class ProfilePage {
     });
   }
   logUserOut() {
-    console.log("Uh hey this is actually getting called.");
     User.logOut();
   }
   createUserAccount() {
