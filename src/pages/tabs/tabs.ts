@@ -10,9 +10,9 @@ import { SettingsPage } from '../settings/settings';
 })
 export class TabsPage {
 
-  tab1Root = MyGroupsPage;
+  tab1Root = SettingsPage;
   tab2Root = ProfilePage;
-  tab3Root = SettingsPage;
+  tab3Root = MyGroupsPage;
 
   constructor() {
 

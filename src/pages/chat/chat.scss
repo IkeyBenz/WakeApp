@@ -1,0 +1,10 @@
+page-chat {
+    .messagesContainer {
+        height: calc(100% - 20px);
+    }
+    .textField {
+        height: 20px;
+        position: fixed;
+        bottom: 0px;
+    }
+}

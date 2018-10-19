@@ -10,14 +10,27 @@
     <button item-end ion-button clear (click)="showNewGroupPage()">New Group</button>
   </ion-item>
   
-  <ion-list>
-      <ion-item *ngFor="let i of [1,2,3,4,5,6,7,8]">
-        <ion-avatar item-start>
-          <ion-icon name="people"></ion-icon>
-        </ion-avatar>
-        <h2>Group Name</h2>
-        <h3>Person Name:</h3>
-        <p>I've had a pretty messed up day. If we just...</p>
-      </ion-item>
-    </ion-list>
+  <ion-list *ngIf="!loggedIn">
+    <ion-item *ngFor="let i of [1,2,3,4,5,6,7,8]">
+      <ion-avatar item-start>
+        <ion-icon name="people"></ion-icon>
+      </ion-avatar>
+      <h2>Fake Group</h2>
+      <h3>Fake Person's Name:</h3>
+      <p>Log in to see your real group chat data...</p>
+    </ion-item>
+  </ion-list>
+
+  <ion-list *ngIf="loggedIn">
+    <ion-item *ngFor="let group of groups" (click)="openChat(group.id)">
+      <ion-avatar item-start>
+        <img *ngIf="group.icon" src="group.icon" alt="">
+        <ion-icon *ngIf="!group.icon" name="people"></ion-icon>
+      </ion-avatar>
+      <h2>{{group.title}}</h2>
+      <h3 *ngIf="group.recentMessage">{{group.recentMessage.author}}</h3>
+      <p *ngIf="group.recentMessage">{{group.recentMessage.text}}</p>
+    </ion-item>
+  </ion-list>
+  
 </ion-content>

@@ -33,6 +33,7 @@ export const User = (function() {
         return auth.createUserWithEmailAndPassword(newUser.email, newUser.password)
             .then(userCredential => {
                 let userName = `${newUser.name.first} ${newUser.name.last}`;
+                delete newUser.password;
                 return userCredential.user.updateProfile({ displayName: userName, photoURL: '' })
                     .then(() => db.collection('users').doc(userCredential.user.uid).set(newUser))
                     .then(() => auth.signInWithCredential(userCredential.credential));

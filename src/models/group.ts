@@ -21,10 +21,8 @@ export const Group = (function() {
     function addUserToGroupWithTitleAndAccessCode(title, accessCode) {
         if (!auth.currentUser)
             return Promise.reject('You are not logged in.');
-        return db.collection('groups')
-        .where('title', '==', title)
-        .where('accessCode', '==', accessCode)
-        .get().then(querySnap => {
+        return db.collection('groups').where('title', '==', title).where('accessCode', '==', accessCode).get()
+        .then(querySnap => {
             if (querySnap.docs.length == 0)
                 return Promise.reject("That group doesn't exist, idiot!");
             if (querySnap.docs[0].data().members.includes(auth.currentUser.uid))
@@ -35,15 +33,33 @@ export const Group = (function() {
             .catch(error => Promise.reject(error.message));
         });
     }
-
+    function getGroupsForUser(uid): Promise<any[]> {
+        return db.collection('users').doc(uid).get()
+        .then(snapshot => getGroupsWithIds(snapshot.data().groups))
+    }
     function leaveGroup() {
 
+    }
+    function getGroupsWithIds(ids): Promise<any[]> {
+        return new Promise(async (resolve, reject) => {
+            if (!ids) return reject("You aren't in any groups.");
+            let groups = [];
+            for (let id of ids) {
+                let group = await db.collection('groups').doc(id).get();
+                groups.push({ ...group.data(), id: group.id });
+            }
+            resolve(groups);
+        });
+    }
+    function getGroupWithId(id) {
+        return db.collection('groups').doc(id).get();
     }
     function readGroup(groupId) {
         return db.collection('groups').doc(groupId).get();
     }
     return {
         create: createGroup,
-        addCurrentUser: addUserToGroupWithTitleAndAccessCode
+        addCurrentUser: addUserToGroupWithTitleAndAccessCode,
+        getGroupsFor: getGroupsForUser
     }
 })();
