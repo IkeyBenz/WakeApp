@@ -17,17 +17,16 @@ export const User = (function() {
         });
     }
 
-    function updateUser(uid, updates) {
+    function updateCurrentUser(updates) {
+        if (!auth.currentUser)
+            return Promise.reject('Not Logged In.');
         if (updates.password) { delete updates.password }
-        updates['lastUpdated'] = new Date().toString();
-        return getProfileFor(uid)
-        .then(docRef => db.collection('users').doc(uid).set({ ...docRef.data(), ...updates }))
+        return db.collection('users').doc(auth.currentUser.uid).update(updates);
     }
 
     function getProfileFor(uid) {
         return db.collection('users').doc(uid).get();
     }
-
 
     function register(newUser) {
         return auth.createUserWithEmailAndPassword(newUser.email, newUser.password)
@@ -65,7 +64,7 @@ export const User = (function() {
         signUp : register,
         logIn  : logUserIn,
         logOut : logUserOut,
-        update : updateUser,
+        update : updateCurrentUser,
         joinGroup: joinGroup,
         getUser: getProfileFor,
         onGroupsUpdated: groupsUpdated,
