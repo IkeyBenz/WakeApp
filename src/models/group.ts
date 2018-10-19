@@ -3,11 +3,13 @@ import { User } from './user';
 
 export const Group = (function() {
 
+    const ref = db.collection('groups');
+
     function createGroup(group) {
         if (!auth.currentUser) 
             return Promise.reject("You're not logged in.");
         let newGroup = { ...group, members: [auth.currentUser.uid] }
-        return db.collection('groups').add(newGroup)
+        return ref.add(newGroup)
         .then(docRef => User.update({
             groups: firebase.FieldValue.arrayUnion(docRef.id)
         }));
@@ -16,7 +18,7 @@ export const Group = (function() {
     function addUserToGroupWithTitleAndAccessCode(title, accessCode) {
         if (!auth.currentUser)
             return Promise.reject("You're not logged in.");
-        return db.collection('groups')
+        return ref
             .where('title', '==', title)
             .where('accessCode', '==', accessCode).get()
             .then(querySnap => {
@@ -36,16 +38,29 @@ export const Group = (function() {
             if (!ids) return reject("You aren't in any groups.");
             let groups = [];
             for (let id of ids) {
-                let group = await db.collection('groups').doc(id).get();
+                let group = await ref.doc(id).get();
                 groups.push({ ...group.data(), id: group.id });
             }
             resolve(groups);
         });
     }
 
+    function onGroupUpdate(groupId, callback) {
+        ref.doc(groupId).onSnapshot(snapshot => {
+            callback(snapshot.data());
+        });
+    }
+
+    function updateGroup(groupId, updates) {
+        console.log(groupId);
+        return ref.doc(groupId).update(updates);
+    }
+
     return {
         create: createGroup,
+        onUpdate: onGroupUpdate,
         addCurrentUser: addUserToGroupWithTitleAndAccessCode,
-        getGroupsWithIds: getGroupsWithIds
+        getGroupsWithIds: getGroupsWithIds,
+        update: updateGroup
     }
 })();

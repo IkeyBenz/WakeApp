@@ -27,7 +27,7 @@ export const Chat = (function() {
 
     function onUpdate(callback) {
         ref.doc(currentChat).onSnapshot(snapshot => {
-            callback(snapshot.data());
+            callback({ ...snapshot.data(), id: snapshot.id });
         });
     }
 
@@ -37,6 +37,7 @@ export const Chat = (function() {
         update: updateChatInfo,
         postMessage: postMessage,
         onUpdate: onUpdate,
-        setCurrentChat: _updateCurrentChatTo
+        setCurrentChat: _updateCurrentChatTo,
+        currentChat: currentChat
     }
 })();

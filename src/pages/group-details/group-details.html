@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{groupDetails.title}}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+  <ion-list>
+    <ion-item>
+      <h2>Group Title: {{groupDetails.title}}</h2>
+      <button ion-button clear icon-only item-end (click)="edit('title', 'Group Title')">
+        <ion-icon name="arrow-dropright"></ion-icon>
+      </button>
+    </ion-item>
+    <ion-item>
+      <h2>Wake Time: {{groupDetails.wakeTime}}</h2>
+      <button ion-button clear icon-only item-end (click)="edit('wakeTime', 'Wake Time')">
+        <ion-icon name="arrow-dropright"></ion-icon>
+      </button>
+    </ion-item>
+    <ion-item>
+      <h2>Wake Message: {{groupDetails.wakeMessage}}</h2>
+      <button ion-button clear icon-only item-end (click)="edit('wakeMessage', 'Wake Message')">
+        <ion-icon name="arrow-dropright"></ion-icon>
+      </button>
+    </ion-item>
+    <ion-item>
+      <h2>Penalty Fee: {{groupDetails.penaltyFee}}</h2>
+      <button ion-button clear icon-only item-end (click)="edit('penaltyFee', 'Penalty Fee')">
+        <ion-icon name="arrow-dropright"></ion-icon>
+      </button>
+    </ion-item>
+    <ion-item-divider>Members:</ion-item-divider>
+    <ion-item *ngFor="let member of groupMembers">
+      <ion-avatar item-start>
+        <img *ngIf="member.profilePic" src="member.profilePic" alt="">
+        <ion-icon *ngIf="!member.profilePic" name="person"></ion-icon>
+      </ion-avatar>
+      <h2>{{member.name.first}} {{member.name.last}}</h2>
+    </ion-item>
+  </ion-list>
+</ion-content>

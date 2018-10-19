@@ -34,5 +34,8 @@ export class ChatPage {
   sendMessage() {
     Chat.postMessage(this.newMessage);
   }
+  showGroupDetails() {
+    this.navCtrl.push('GroupDetailsPage', { groupDetails: this.chat });
+  }
 
 }

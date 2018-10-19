@@ -2,6 +2,8 @@ import { auth, db, firebase } from './firebase';
 
 export const User = (function() {
 
+    const ref = db.collection('users');
+
     function checkLoggedInState(callback) {
         auth.onAuthStateChanged(user => {
             if (user) {
@@ -21,11 +23,11 @@ export const User = (function() {
         if (!auth.currentUser)
             return Promise.reject('Not Logged In.');
         if (updates.password) { delete updates.password }
-        return db.collection('users').doc(auth.currentUser.uid).update(updates);
+        return ref.doc(auth.currentUser.uid).update(updates);
     }
 
     function getProfileFor(uid) {
-        return db.collection('users').doc(uid).get();
+        return ref.doc(uid).get();
     }
 
     function register(newUser) {
@@ -34,7 +36,7 @@ export const User = (function() {
                 let userName = `${newUser.name.first} ${newUser.name.last}`;
                 delete newUser.password;
                 return userCredential.user.updateProfile({ displayName: userName, photoURL: '' })
-                    .then(() => db.collection('users').doc(userCredential.user.uid).set(newUser))
+                    .then(() => ref.doc(userCredential.user.uid).set(newUser))
                     .then(() => auth.signInWithCredential(userCredential.credential));
             });
     }
@@ -50,16 +52,26 @@ export const User = (function() {
     function joinGroup(groupId) {
         if (!auth.currentUser)
             return Promise.reject('Not signed in.');
-        return db.collection('users').doc(auth.currentUser.uid).update({
+        return ref.doc(auth.currentUser.uid).update({
             groups: firebase.FieldValue.arrayUnion(groupId)
         });
     }
 
     function groupsUpdated(callback) {
-        db.collection('users').doc(auth.currentUser.uid)
+        ref.doc(auth.currentUser.uid)
         .onSnapshot(snapshot => callback(snapshot.data().groups));
     }
     
+    function getAllWithIds(uids) {
+        return new Promise(async (resolve, reject) => {
+            let members = [];
+            for (let id of uids) {
+                let snapshot = await ref.doc(id).get();
+                members.push(snapshot.data());
+            }
+            resolve(members);
+        });
+    }
     return {
         signUp : register,
         logIn  : logUserIn,
@@ -69,7 +81,8 @@ export const User = (function() {
         getUser: getProfileFor,
         onGroupsUpdated: groupsUpdated,
         currentUser: auth.currentUser,
-        authStateChanged: checkLoggedInState
+        authStateChanged: checkLoggedInState,
+        getAllWithIds: getAllWithIds
     }
     
 })();
