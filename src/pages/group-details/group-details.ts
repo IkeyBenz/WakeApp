@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
-import { Chat } from '../../models/chat';
 import { Group } from '../../models/group';
 import { User } from '../../models/user';
 
