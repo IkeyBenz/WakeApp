@@ -11,10 +11,10 @@ import { User } from '../../models/user';
 export class NewGroupPage {
 
   creating = true;
-  accessCode = "";
   group = { 
     title: "", accessCode: "", wakeTime: "", 
-    penaltyFee: "", wakeMessage: "", members: [] }
+    penaltyFee: "", wakeMessage: "", members: [] 
+  }
 
   constructor(public navCtrl: NavController, private toastCtrl: ToastController) {
   }

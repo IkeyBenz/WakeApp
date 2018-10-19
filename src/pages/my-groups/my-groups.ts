@@ -3,6 +3,7 @@ import { NavController, ToastController } from 'ionic-angular';
 import { auth } from '../../models/firebase';
 import { Group } from '../../models/group';
 import { Chat } from '../../models/chat';
+import { User } from '../../models/user';
 
 @Component({
   selector: 'page-my-groups',
@@ -18,15 +19,18 @@ export class MyGroupsPage {
 
   ionViewDidLoad() {
     if (auth.currentUser) {
-      this.showToast('Updating Chats...');
       this.loggedIn = true;
-      Group.getGroupsFor(auth.currentUser.uid).then(groups => {
-        this.groups = groups;
-        console.log(this.groups);
-      }).catch(this.showToast);
+      User.onGroupsUpdated(this.reloadGroups.bind(this));
     } else {
       this.loggedIn = false;
     }
+  }
+
+  reloadGroups(groupIds) {
+    console.log(groupIds);
+    Group.getGroupsWithIds(groupIds).then(groups => {
+      this.groups = groups;
+    });
   }
 
   showNewGroupPage() {
