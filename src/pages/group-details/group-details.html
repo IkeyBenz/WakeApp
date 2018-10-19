@@ -7,9 +7,13 @@
 
 <ion-content padding>
   <ion-list>
-    <ion-item>
+    <ion-item (click)="edit('title', 'Group Title')">
       <h2>Group Title: {{groupDetails.title}}</h2>
-      <button ion-button clear icon-only item-end (click)="edit('title', 'Group Title')">
+      <ion-icon item-end name="arrow-dropright"></ion-icon>
+    </ion-item>
+    <ion-item>
+      <h2>Access Code: {{groupDetails.accessCode}}</h2>
+      <button ion-button clear icon-only item-end (click)="edit('accessCode', 'Access Code')">
         <ion-icon name="arrow-dropright"></ion-icon>
       </button>
     </ion-item>

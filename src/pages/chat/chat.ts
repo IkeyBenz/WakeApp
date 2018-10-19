@@ -33,6 +33,7 @@ export class ChatPage {
   }
   sendMessage() {
     Chat.postMessage(this.newMessage);
+    this.newMessage.text = "";
   }
   showGroupDetails() {
     this.navCtrl.push('GroupDetailsPage', { groupDetails: this.chat });
