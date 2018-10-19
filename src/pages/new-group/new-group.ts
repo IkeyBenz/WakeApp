@@ -20,7 +20,7 @@ export class NewGroupPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad NewGroupPage');
+
   }
   toggleCreating() {
     if (this.creating) { this.creating = false }

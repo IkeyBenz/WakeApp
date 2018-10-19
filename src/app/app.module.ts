@@ -26,7 +26,9 @@ import { FIRE_CONFIG } from '../fireConfig';
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp),
+    IonicModule.forRoot(MyApp, {
+      tabsHideOnSubPages: true
+    }),
     AngularFireModule.initializeApp(FIRE_CONFIG),
     AngularFireAuthModule,
     AngularFirestoreModule

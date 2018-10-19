@@ -3,8 +3,10 @@ page-chat {
         height: calc(100% - 20px);
     }
     .textField {
-        height: 20px;
+        height: 47px !important;
         position: fixed;
         bottom: 0px;
+        left: 0px !important;
+        width: 100vw !important;
     }
 }

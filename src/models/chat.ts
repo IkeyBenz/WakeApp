@@ -25,11 +25,18 @@ export const Chat = (function() {
         return ref.doc(currentChat).update(updates);
     }
 
+    function onUpdate(callback) {
+        ref.doc(currentChat).onSnapshot(snapshot => {
+            callback(snapshot.data());
+        });
+    }
+
 
     return {
         load: getChatInfo,
         update: updateChatInfo,
         postMessage: postMessage,
+        onUpdate: onUpdate,
         setCurrentChat: _updateCurrentChatTo
     }
 })();

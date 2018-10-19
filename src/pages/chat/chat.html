@@ -7,12 +7,17 @@
 
 <ion-content padding>
   <div class="messagesContainer">
-
+    <ion-list>
+      <ion-item *ngFor="let message of chat.messages">
+        <h3>{{message.text}}</h3>
+        <p>{{message.author}}</p>
+      </ion-item>
+    </ion-list>
   </div>
   
   <ion-item class="textField">
-    <ion-input type="text" placeholder="New Message"></ion-input>
-    <button ion-button icon-only clear item-end>
+    <ion-input type="text" [(ngModel)]="newMessage.text" placeholder="New Message"></ion-input>
+    <button ion-button icon-only clear item-end (click)="sendMessage()">
       <ion-icon name="send"></ion-icon>
     </button>
   </ion-item>

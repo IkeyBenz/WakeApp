@@ -27,7 +27,6 @@ export class MyGroupsPage {
   }
 
   reloadGroups(groupIds) {
-    console.log(groupIds);
     Group.getGroupsWithIds(groupIds).then(groups => {
       this.groups = groups;
     });
@@ -37,9 +36,8 @@ export class MyGroupsPage {
     this.navCtrl.push("NewGroupPage");
   }
   openChat(chatId) {
-    console.log(chatId);
     Chat.setCurrentChat(chatId);
-    this.navCtrl.push("ChatPage");
+    this.navCtrl.push('ChatPage');
   }
   showToast(message) {
     this.toastCtrl.create({

@@ -55,10 +55,12 @@ export const User = (function() {
             groups: firebase.FieldValue.arrayUnion(groupId)
         });
     }
+
     function groupsUpdated(callback) {
         db.collection('users').doc(auth.currentUser.uid)
         .onSnapshot(snapshot => callback(snapshot.data().groups));
     }
+    
     return {
         signUp : register,
         logIn  : logUserIn,

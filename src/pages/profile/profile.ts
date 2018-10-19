@@ -17,11 +17,8 @@ export class ProfilePage {
 
   }
 
-
   ionViewDidLoad() {
-    this.showToast("Hey there good lookin'");
     User.authStateChanged(function(data) {
-      console.log(data);
       if (data.error) {
         this.showToast(data.error.message);
       } else if (data.user) {

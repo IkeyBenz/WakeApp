@@ -1,6 +1,4 @@
 import { Component } from '@angular/core';
-
-
 import { ProfilePage } from '../profile/profile';
 import { MyGroupsPage } from '../my-groups/my-groups';
 import { SettingsPage } from '../settings/settings';
